@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.e610.mylocation.Utils.GPSTracker;
+import com.example.e610.mylocation.Utils.NetworkStatus;
 
 import java.io.IOException;
 import java.util.List;
@@ -46,28 +47,29 @@ public class MainActivity extends AppCompatActivity {
         geocoder=new Geocoder(getApplicationContext(), Locale.getDefault());
         addresses=null;
 
+        if(!new NetworkStatus(MainActivity.this).isConnectingToInternet())
+        {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+
+            // Setting Dialog Title
+            alertDialog.setTitle("No Connection");
+
+            // Setting Dialog Messagee
+            alertDialog.setMessage("No Internet available");
+            alertDialog.show();
+        }
+
         myLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-               // if(myGPS.canGetLocation()){
-                if(true){
+               if(myGPS.canGetLocation()){
+
                     try {
-                        try {
-                            latitudeValue = Double.valueOf(latitude.getText().toString());
-                            longitudeValue = Double.valueOf(longitude.getText().toString());
-                        }catch (Exception e){
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getApplicationContext());
 
-                            // Setting Dialog Title
-                            alertDialog.setTitle("Error");
-
-                            // Setting Dialog Message
-                            alertDialog.setMessage("Please Enter a Valid Number");
-                        }
-                       // addresses = geocoder.getFromLocation(myGPS.getLatitude(),myGPS.getLongitude(),1);
-                        addresses = geocoder.getFromLocation(latitudeValue, longitudeValue,1);
-                        Toast.makeText(getApplicationContext(),addresses.get(0).getFeatureName(),Toast.LENGTH_LONG).show();
+                        addresses = geocoder.getFromLocation(myGPS.getLatitude(),myGPS.getLongitude(),1);
+                        if(addresses.size()>0)
+                            Toast.makeText(getApplicationContext(),addresses.get(0).getFeatureName(),Toast.LENGTH_LONG).show();
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -80,19 +82,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        otherLocationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    latitudeValue = Double.valueOf(latitude.getText().toString());
+                    longitudeValue = Double.valueOf(longitude.getText().toString());
+                    addresses = geocoder.getFromLocation(latitudeValue, longitudeValue,1);
+                    Toast.makeText(getApplicationContext(),addresses.get(0).getFeatureName(),Toast.LENGTH_LONG).show();
+                }catch (Exception e){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
 
-        /*try {
-            latitudeValue = Double.valueOf(latitude.getText().toString());
-            longitudeValue = Double.valueOf(longitude.getText().toString());
-        }catch (Exception e){
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getApplicationContext());
+                    // Setting Dialog Title
+                    alertDialog.setTitle("Error");
 
-            // Setting Dialog Title
-            alertDialog.setTitle("Error");
+                    // Setting Dialog Message
+                    alertDialog.setMessage("Please Enter a Valid Number");
+                    alertDialog.show();
+                }
+            }
+        });
 
-            // Setting Dialog Message
-            alertDialog.setMessage("Please Enter a Valid Number");
-        }
+        /*
 */
 
 

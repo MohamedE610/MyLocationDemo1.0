@@ -18,14 +18,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/myLocationBtn"
             android:text="Tell Me My Location"
-            android:layout_marginBottom="80dp"/>
+            android:layout_marginBottom="50dp"/>
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="If you want to know other locations enter following details"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="50dp"
             android:textColor="#000000"
             android:textSize="20dp"/>
 
